@@ -79,3 +79,53 @@ main {
 .btn i {
   font-size: 12px;
 }
+
+th {
+  text-align: left; /* Align header text to the left */
+  vertical-align: middle; /* Align content vertically */
+}
+
+th span {
+  font-size: 10px; /* Adjust size */
+}
+
+th .d-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Push text and buttons to edges */
+  gap: 15px; /* Add spacing between text and buttons */
+}
+
+th a.sort {
+  color: inherit; /* Use default text color */
+  text-decoration: none;
+  font-size: 10px; /* Adjust size if needed */
+}
+
+th i {
+  cursor: pointer;
+  display: inline-block;
+  vertical-align: middle;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  text-align: center;
+  font-size: 16px; /* Adjust size */
+}
+
+th a.sort:hover i {
+  color: #007bff; /* Highlight on hover */
+}
+
+@media (max-width: 768px) {
+  th .d-flex {
+    flex-wrap: wrap; /* Allow wrapping */
+    justify-content: space-between;
+  }
+
+  th span {
+    margin-bottom: 4px; /* Space between wrapped elements */
+  }
+}
+
+

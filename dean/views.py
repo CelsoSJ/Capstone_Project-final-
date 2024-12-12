@@ -14,7 +14,7 @@ from django.utils.encoding import force_bytes, force_str  #essential for convert
 from .tokens import account_activation_token  #importing the token that is created at tokens.py
 from django.utils.html import strip_tags
 from faculty.models import Document
-
+from .decorators import role_required
 
 
 
@@ -22,22 +22,27 @@ from faculty.models import Document
 
 
 # Create your views here
-@login_required  #to restrict access to the view. It requires 
+@login_required  #to restrict access to the view. It requires authenticated user
+@role_required('Dean')
 def home_page(request):
   return render(request, 'dean/homepage.html')
 
+
+
 @login_required
+@role_required('Dean')
 def userManagement(request):
   # exclude users with specified roles and staff users
-  exclude_roles = [1,4]
+  exclude_roles = [3,4]
 
   # get search query from GET parameters
   query = request.GET.get('search', '')
   if query:
      # filter users based on search query
-     users = CustomUser.objects.filter(Q(first_name__icontains=query)|Q(username__icontains=query)|Q(program__name__icontains=query) ).exclude(role__in=exclude_roles).exclude(is_staff=True).exclude(is_archived=True)   #this search query will filter user with the first_name/username provided in the seach field
+     users = CustomUser.objects.filter(Q(first_name__icontains=query)|Q(username__icontains=query)|Q(program__name__icontains=query)|Q(first_name__icontains=query)|Q(last_name__icontains=query)|Q(program__name__icontains=query) ).exclude(role__in=exclude_roles).exclude(is_staff=True).exclude(is_archived=True)   #this search query will filter user with the first_name/username provided in the seach field
   else:
      users = CustomUser.objects.exclude(role__in=exclude_roles).exclude(is_staff=True).exclude(is_archived=True) # this filters the list of users that will be rendered in the usermanagement page, so this excludes the Dean and QAO with an id of 3 and 4 respectively
+
   dean= request.user
   department = dean.department
   # Initialize the form with the current dean
@@ -45,20 +50,24 @@ def userManagement(request):
   return render(request, 'dean/UserManagement.html',{'users':users, 'form':form, 'department':department, 'query':query})
 
 
+
 User = get_user_model() # to retreive the user model that is currently active in the project
+
 
 # view for creating faculty users
 @login_required
+@role_required('Dean')
 def create_user(request):
   if request.method == 'POST':
     form = CustomUserCreationForm(request.POST, dean=request.user)
     if form.is_valid():
          user = form.save(commit=False)
          user.is_active = False     #deactivate account until email verification
-         
-         # save the user object first before adding the relationship (program)
+
+          #save the user
          user.save()
-         user.program.set(form.cleaned_data['program']) #Save selected programs
+         #form.save()
+
 
 
          #send verification email
@@ -75,20 +84,19 @@ def create_user(request):
          email.send()
 
 
-         messages.success(request, 'User succesfully created! An email has been sent for verification.') #show alert after a new user is created
+         messages.success(request, 'User succesfully created!') #show alert after a new user is created
          return JsonResponse({"success": True})
-    
-    
+
+
     else:
       # #is used to render a Django template into a string, which is then returned as part of a JSON response. This is particularly useful in AJAX requests where you want to update part of a web page without a full page reload.
       html_form = render_to_string('dean/create_user_form.html',{'form':form}, request=request)
       return JsonResponse({'success':False, 'html_form':html_form})
-  
+
   else:
        dean= request.user
        form = CustomUserCreationForm(dean=dean)
        return render(request,'dean/create_user_form.html', {'form':form})
-  
 
 
 
@@ -96,7 +104,8 @@ def create_user(request):
 
 
 
-#a view for handling the activation link in the verification email
+
+#a view for handling the activation link in the verification email, this will verify the token and activate the user account
 def activate(request, uidb64, token):
    try:
       uid = force_str(urlsafe_base64_decode(uidb64))
@@ -110,7 +119,7 @@ def activate(request, uidb64, token):
       return render(request, 'dean/activation_success.html')
    else:
       return render(request, 'dean/activation_invalid.html')
-      
+
 
 
 
@@ -118,6 +127,7 @@ def activate(request, uidb64, token):
 
 #view for editing user info
 @login_required
+@role_required('Dean')
 def edit_user(request, user_id):
     user = get_object_or_404(CustomUser, id=user_id)
     if request.method == 'POST':
@@ -134,17 +144,31 @@ def edit_user(request, user_id):
     return render(request, 'dean/edit_user_form.html', {'form': form, 'user':user})
 
 
+
+# view for displaying approved documents
+@role_required('Dean')
 def department_files_view(request):
    dean = request.user
-   documents = Document.objects.filter(department=dean.department).filter(status='Approved')
-   return render(request,'dean/files.html',{'documents':documents})
+
+   query = request.GET.get('search','') # get the search term
+   if query:
+      documents = Document.objects.filter(department=dean.department).filter(status='Approved').filter(Q(document_type__icontains=query)| Q(submitted_by__username__icontains=query)| Q(program__name__icontains=query)| Q(document_name__icontains=query))
+
+   else:
+      documents = Document.objects.filter(department=dean.department).filter(status='Approved')
+
+
+   return render(request,'dean/files.html',{'documents':documents, 'query':query})
+
+
 
 
 
 # view in setting the is_archive attribute to True
+@role_required('Dean')
 def archive_user(request, user_id):
    user = get_object_or_404(CustomUser, id=user_id)
-  
+
    user.is_archived = True
    user.save()
 
@@ -152,15 +176,22 @@ def archive_user(request, user_id):
    return redirect('userManagement')
 
 
-
+# view in displaying the archived user in the template
+@role_required('Dean')
 def list_of_archived_user(request):
    dean = request.user
-   archived_users = CustomUser.objects.filter(is_archived=True).filter(department=dean.department)
+
+   query = request.GET.get('search', '')
+   if query:
+       archived_users = CustomUser.objects.filter(is_archived=True).filter(department=dean.department).filter(Q(username__icontains=query)| Q(first_name__icontains=query)| Q(last_name__icontains=query))
+   else:
+       archived_users = CustomUser.objects.filter(is_archived=True).filter(department=dean.department)
+
    return render(request, 'dean/archived_users.html',{'archived_users':archived_users})
 
 
 
-
+@role_required('Dean')
 def delete_user(request, user_id):
    user = get_object_or_404(CustomUser, id=user_id)
    if user.is_archived:
@@ -170,7 +201,7 @@ def delete_user(request, user_id):
       return redirect('list-of-archived-users')
 
 
-
+@role_required('Dean')
 def restore_user(request, user_id):
    user = get_object_or_404(CustomUser, id=user_id)
    if user.is_archived:
@@ -181,5 +212,37 @@ def restore_user(request, user_id):
       messages.success(request, f'Archived User Account "{user.username}" has been successfully restored!')
       return redirect('list-of-archived-users')
 
-   
+
+
+
+
+def trash_bin(request):
+    trashed_documents = Document.trash.all()
+
+    query = request.GET.get('search','') # get the search term
+    if query:
+       trashed_documents = Document.trash.filter(Q(document_name__icontains=query))
+
+    return render(request, 'dean/trash_bin.html', {'documents': trashed_documents})
+
+
+def soft_delete_document(request, document_id):
+  document = get_object_or_404(Document, id=document_id)
+  document.soft_delete()  # Call the soft delete method
+  return redirect('department-files')  # Redirect to the documents list page
+
+
+def restore_document(request, document_id):
+    document = get_object_or_404(Document.trash, id=document_id)
+    document.restore()
+    return redirect('trash_bins')
+
+
+def delete_permanently(request, document_id):
+    document = get_object_or_404(Document.trash, id=document_id)
+    document.delete_permanently()
+    return redirect('trash_bins')
+
+
+
 

@@ -46,6 +46,16 @@
                   <i class="bx bx-file"></i> <span class="ms-2">Files</span>
                 </a>
               </li>
+               <li class="nav-item">
+                <a href="{% url 'iso-files' %}" class="nav-link text-white d-flex align-items-center">
+                  <i class="bx bx-file"></i> <span class="ms-2">ISO Files</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'trash_binss' %}" class="nav-link text-white d-flex align-items-center">
+                  <i class="bx bx-trash"></i> <span class="ms-2">Trash</span>
+                </a>
+              </li>
             </ul>
             <div class="position-absolute bottom-0 start-0 w-100 ms-3">
               <div class="dropdown open">
@@ -54,9 +64,7 @@
                   <i class="bx bx-user"></i><span class="name-tag ms-2">{{ user.username }}</span>
                 </a>
                 <div class="dropdown-menu ms-4" aria-labelledby="triggerId">
-                  <li><a class="dropdown-item" href="">Profile</a></li>
-                  <li><a class="dropdown-item" href="#">Settings</a></li>
-                  
+
                   <li>
                     <hr class="dropdown-divider">
                   </li>
@@ -75,7 +83,8 @@
 
   <script src="./dean_dashboard.css/script.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
+  <!-- jQuery CDN -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 
   <script>

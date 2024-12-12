@@ -42,7 +42,7 @@
 
         <a href="#" id="confirmDeleteButton" class="btn btn-primary">Delete</a>
       </div>
-      
+
     </div>
   </div>
 </div>
@@ -67,56 +67,137 @@
 
         <a href="#" id="confirmRestoreButton" class="btn btn-primary">Restore</a>
       </div>
-      
+
     </div>
   </div>
 </div>
 
 
+ <form method="GET" action="">
+    <div class="row align-items-center">
+      <div class="col-md-8 col-12">
+        <div class="form-group">
+          <input type="text" name="search" id="search-bar" class="form-control responsive-placeholder" placeholder="Search Documents" value="{{ query }}">
+        </div>
+      </div>
+
+      <div class="col-md-4 col-12 d-flex justify-content-md-end justify-content-start mt-2 mt-md-0">
+        <button type="submit" class="btn btn-primary me-2">Search</button>
+        <button type="button" class="btn btn-secondary me-4" onclick="clearSearch()">Clear</button>
+      </div>
+    </div>
+  </form>
 
 
-  
-  <div class="content-container me-3"> <!-- Added this div -->
-    <div class="row">
-      <div class="col-12 ">
-        <table class="table table-striped">
+  <div class="content-container me-3 mt-2">
+  <div class="row">
+    <div class="col-12">
+      <table class="table table-striped">
+        <thead>
           <tr>
-            <th>Name</th>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Department</th>
-            <th>Program</th>
-            <th>Role</th>
+            <th>
+              <div class="d-flex align-items-center justify-content-between">
+                <span>Name</span>
+                <span>
+                  <a href="#" class="sort" data-sort="name" data-order="asc">
+                    <i class="bx bx-up-arrow-alt"></i>
+                  </a>
+                  <a href="#" class="sort" data-sort="name" data-order="desc">
+                    <i class="bx bx-down-arrow-alt"></i>
+                  </a>
+                </span>
+              </div>
+            </th>
+            <th>
+              <div class="d-flex align-items-center justify-content-between">
+                <span>Username</span>
+                <span>
+                  <a href="#" class="sort" data-sort="username" data-order="asc">
+                    <i class="bx bx-up-arrow-alt"></i>
+                  </a>
+                  <a href="#" class="sort" data-sort="username" data-order="desc">
+                    <i class="bx bx-down-arrow-alt"></i>
+                  </a>
+                </span>
+              </div>
+            </th>
+            <th>
+              <div class="d-flex align-items-center justify-content-between">
+                <span>Email</span>
+                <span>
+                  <a href="#" class="sort" data-sort="email" data-order="asc">
+                    <i class="bx bx-up-arrow-alt"></i>
+                  </a>
+                  <a href="#" class="sort" data-sort="email" data-order="desc">
+                    <i class="bx bx-down-arrow-alt"></i>
+                  </a>
+                </span>
+              </div>
+            </th>
+            <th>
+              <div class="d-flex align-items-center justify-content-between">
+                <span>Department</span>
+                <span>
+                  <a href="#" class="sort" data-sort="department" data-order="asc">
+                    <i class="bx bx-up-arrow-alt"></i>
+                  </a>
+                  <a href="#" class="sort" data-sort="department" data-order="desc">
+                    <i class="bx bx-down-arrow-alt"></i>
+                  </a>
+                </span>
+              </div>
+            </th>
+            <th>
+              <div class="d-flex align-items-center justify-content-between">
+                <span>Program</span>
+                <span>
+                  <a href="#" class="sort" data-sort="program" data-order="asc">
+                    <i class="bx bx-up-arrow-alt"></i>
+                  </a>
+                  <a href="#" class="sort" data-sort="program" data-order="desc">
+                    <i class="bx bx-down-arrow-alt"></i>
+                  </a>
+                </span>
+              </div>
+            </th>
+            <th>
+              <div class="d-flex align-items-center justify-content-between">
+                <span>Role</span>
+                <span>
+                  <a href="#" class="sort" data-sort="role" data-order="asc">
+                    <i class="bx bx-up-arrow-alt"></i>
+                  </a>
+                  <a href="#" class="sort" data-sort="role" data-order="desc">
+                    <i class="bx bx-down-arrow-alt"></i>
+                  </a>
+                </span>
+              </div>
+            </th>
             <th>Action</th>
           </tr>
+        </thead>
+        <tbody>
           {% for archived_user in archived_users %}
             <tr>
-              <td>{{ archived_user.first_name}} {{ archived_user.last_name }}</td>
-              <td>{{ archived_user.username}}</td>
-              <td>{{ archived_user.email}}</td>
-              <td>{{ archived_user.department}}</td>
-              <td>
-                {% for program in archived_user.program.all %}
-                  {{ program }},
-                {% endfor %}
-              </td>
-              <td>{{ archived_user.role}}</td>
+              <td>{{ archived_user.first_name }} {{ archived_user.last_name }}</td>
+              <td>{{ archived_user.username }}</td>
+              <td>{{ archived_user.email }}</td>
+              <td>{{ archived_user.department }}</td>
+              <td>{{ archived_user.program }}</td>
+              <td>{{ archived_user.role }}</td>
               <td>
                 <div class="d-flex justify-content-start gap-3">
-                  
-                  <button class="btn btn-danger btn-sm" onclick="openDeleteModal('{{archived_user.id}}','{{archived_user.username}}')">Delete</button>
-
-
-                  <button class="btn btn-warning btn-sm" onclick="openRestoreModal('{{archived_user.id}}','{{archived_user.username}}')">Restore</button>
-                      
+                  <button class="btn btn-danger btn-sm" onclick="openDeleteModal('{{ archived_user.id }}','{{ archived_user.username }}')">Delete</button>
+                  <button class="btn btn-warning btn-sm" onclick="openRestoreModal('{{ archived_user.id }}','{{ archived_user.username }}')">Restore</button>
                 </div>
               </td>
             </tr>
           {% endfor %}
-        </table>
-      </div>
+        </tbody>
+      </table>
     </div>
-  </div> <!-- End of content-container -->
+  </div>
+</div>
 </main>
 
 
@@ -154,6 +235,61 @@
     //show the modal
     $('.restore_user').modal('show');
   }
+</script>
+
+
+
+<!--script to clear the search input field-->
+<script>
+  function clearSearch() {
+      document.getElementsByName('search')[0].value = '';
+      document.forms[0].submit();
+  }
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".sort").forEach(button => {
+    button.addEventListener("click", function (e) {
+      e.preventDefault();
+      const column = this.getAttribute("data-sort");
+      const order = this.getAttribute("data-order");
+      sortTable(column, order);
+    });
+  });
+
+  function sortTable(column, order) {
+    const tableBody = document.querySelector("table tbody");
+    const rows = Array.from(tableBody.querySelectorAll("tr"));
+
+    rows.sort((rowA, rowB) => {
+      const cellA = rowA.querySelector(`td:nth-child(${getColumnIndex(column)})`).textContent.trim();
+      const cellB = rowB.querySelector(`td:nth-child(${getColumnIndex(column)})`).textContent.trim();
+
+      if (!isNaN(cellA) && !isNaN(cellB)) {
+        return order === "asc" ? cellA - cellB : cellB - cellA;
+      }
+      if (Date.parse(cellA) && Date.parse(cellB)) {
+        return order === "asc" ? new Date(cellA) - new Date(cellB) : new Date(cellB) - new Date(cellA);
+      }
+      return order === "asc" ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
+    });
+
+    rows.forEach(row => tableBody.appendChild(row));
+  }
+
+  function getColumnIndex(column) {
+    switch (column) {
+      case "name": return 1;
+      case "username": return 2;
+      case "email": return 3;
+      case "department": return 4;
+      case "program": return 5;
+      case "role": return 6;
+      default: return 1;
+    }
+  }
+});
 </script>
 
 {% endblock %}

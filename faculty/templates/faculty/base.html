@@ -60,6 +60,11 @@
                   <i class="bx bx-bell"></i> <span class="ms-2">Notification</span> <span id="notification-count" class="badge badge-pill badge-primary"></span>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="{% url 'trash_bin' %}" class="nav-link text-white d-flex align-items-center">
+                  <i class="bx bx-trash"></i> <span class="ms-2">Trash</span>
+                </a>
+              </li>
             </ul>
             <div class="position-absolute bottom-0 start-0 w-100 ms-1">
               <div class="dropdown open">
@@ -68,9 +73,7 @@
                   <i class="bx bx-user"></i><span class="ms-2">{{user}}</span>
                 </a>
                 <div class="dropdown-menu ms-3" aria-labelledby="triggerId">
-                  <li><a class="dropdown-item" href="#">Profile</a></li>
-                  <li><a class="dropdown-item" href="#">Settings</a></li>
-                  
+
                   <li>
                     <hr class="dropdown-divider">
                   </li>
@@ -82,13 +85,13 @@
         </div>
       </div>
        {% block content %}
-       
+
        {% endblock %}
     </div>
   </div>
 
 
-  
+
    <!-- jQuery CDN -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -101,21 +104,25 @@
   </script>
 
 <!-- script for notification count -->
-<script> 
-  function updateNotificationCount() { 
-    $.ajax({ 
+<script>
+  function updateNotificationCount() {
+    $.ajax({
       url: '{% url "unread-notification-count" %}', success: function(data) {
          $('#notification-count').text(data.unread_count); },
          error: function(xhr, status, error) { console.log("Error: " + error); }
-        }); 
-        } 
+        });
+        }
 
         $(document).ready(function() {
-           updateNotificationCount(); setInterval(updateNotificationCount, 60000); // Update every 60 seconds 
-           
-          }); 
-           
+           updateNotificationCount(); setInterval(updateNotificationCount, 60000); // Update every 60 seconds
+
+          });
+
 </script>
+
+
+
+
 
 </body>
 

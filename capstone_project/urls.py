@@ -18,12 +18,10 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from filebrowser.sites import site
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('admin/filebrowser/', site.urls),
-    path('login/', include('login.urls')),
+    path('', include('login.urls')),
     path('dean/', include('dean.urls')),
     path('pc/', include('pc.urls')),
     path('faculty/', include('faculty.urls')),

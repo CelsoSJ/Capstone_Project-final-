@@ -9,7 +9,7 @@ html, body {
 }
 
 main {
-  margin-left: 20px; /* adjust the value to your liking */
+  margin-left: 10px; /* adjust the value to your liking */
 }
 
 #sidebar-nav li a {
@@ -30,4 +30,14 @@ main {
   background-color: #dcdcdc; /* Optional: Set a background color */
 }
 
+@media only screen and (max-width: 768px) {
+
+  span {
+    display: none;
+  }
+ 
+  .name-container.position-absolute {
+    margin-left: 0 !important;
+  }
+}
 

@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
             name='Document',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('file', models.FileField(upload_to='documents/', validators=[faculty.validators.validate_file_type_and_size])),
+                ('file', models.FileField(upload_to='documents/', validators=[faculty.validators.validate_size_and_type])),
                 ('date_submitted', models.DateTimeField(auto_now_add=True)),
                 ('status', models.CharField(choices=[('Pending', 'Pending'), ('Approved', 'Approved'), ('Declined', 'Declined')], max_length=30)),
                 ('comment', models.TextField(blank=True, null=True)),

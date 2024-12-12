@@ -1,7 +1,6 @@
 html, body {
   height: 100%; /* Ensure full height */
   margin: 0; /* Remove default margin */
-  overflow: hidden; /* Prevent scrolling */
 }
 
 .custom-primary {
@@ -22,12 +21,25 @@ main {
 }
 
 .content-container {
-  height: 490px; /* Set a fixed height for the container */
+  height: 500px; /* Set a fixed height for the container */
   overflow-y: auto; /* Enable vertical scrolling */
+  overflow-x:auto; /* Enable vertical scrolling */
   padding: 15px; /* Optional: Add some padding */
   border: 1px solid #ccc; /* Optional: Add a border */
   border-radius: 5px; /* Optional: Add rounded corners */
   background-color: #dcdcdc; /* Optional: Set a background color */
+}
+
+
+@media only screen and (max-width: 768px) {
+
+  span {
+    display: none;
+  }
+
+  .name-container.position-absolute {
+    margin-left: 0 !important;
+  }
 }
 
 

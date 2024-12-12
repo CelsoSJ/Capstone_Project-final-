@@ -21,11 +21,11 @@
             <div class="box-body ">
               <ul class="d-flex align-items-center gap-3">
                 <i class="notification-icon bx bx-bell"></i>
-                <li class=""> {{ notification.message }} - {{ notification.date_created }} 
-                  {% if not notification.read %} <a href="{% url 'mark-as-read' notification.id %}" class="btn btn-sm btn-primary">Mark as Read</a>
+                <li class=""> {{ notification.message }} - {{ notification.date_created }}
+                  {% if not notification.read %} <a href="{% url 'mark-as-reads' notification.id %}" class="btn btn-sm btn-primary">Mark as Read</a>
                    {% endif %}
                 </li>
-                
+
               </ul>
             </div>
           </div>

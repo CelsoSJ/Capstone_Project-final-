@@ -16,7 +16,7 @@ def login_view(request):
       user = authenticate(username=username,password=password)
 
       if user is not None:
-        login(request, user) 
+        login(request, user)
         #check user role and redirect them to their dashboard
         messages.success(request, 'Login successful!')  #display an alert for successful login
         if user.role.name == 'Dean':
@@ -28,18 +28,17 @@ def login_view(request):
         elif user.role.name == "Quality Assurance Officer":
           next_page = reverse('qao-homepage')
 
-        return render(request, 'login/Login.html', {'form':form,'next':next_page, 'show_modal':True})
+      return render(request, 'login/Login.html', {'form':form,'next':next_page, 'show_modal':True})
 
-   
 
   else:
-    form = LoginForm() #This ensures an empty form on GET request   
+         form = LoginForm()#This ensures an empty form on GET request
 
   return render(request, 'login/Login.html', {'form':form, 'show_modal':False})
 
 
-# logout view  
+# logout view
 def log_out(request):
   logout(request)
   return redirect(reverse('login'))
-        
+

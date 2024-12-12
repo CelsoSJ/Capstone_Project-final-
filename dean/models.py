@@ -15,7 +15,7 @@ class Department(models.Model):
 
 class Role(models.Model):
   name = models.CharField(max_length=30)
-  
+
 
   def __str__(self):
     return self.name
@@ -32,12 +32,12 @@ class Program(models.Model):
 # creating a custom user with added fields
 # add 'from django.contrib.auth.models import Abstractuser' at the top
 class CustomUser(AbstractUser):
-  address = models.CharField(max_length=255)
-  birthday = models.DateField(null=True)
-  middle_initial = models.CharField(max_length=1)
+  address = models.CharField(max_length=255, null=True, blank=True)
+  birthday = models.DateField(null=True, blank=True)
+  middle_initial = models.CharField(max_length=1, null=True, blank=True)
   role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True)
   department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, blank=True)
-  program = models.ManyToManyField(Program, blank=True)
+  program = models.ForeignKey(Program, on_delete=models.SET_NULL, null=True, blank=True)
   bio = models.TextField(blank=True, null=True)
   profile_image = models.ImageField(upload_to='profile_images/', blank=True, null=True, validators=[validate_image])
   is_archived = models.BooleanField(default=False)

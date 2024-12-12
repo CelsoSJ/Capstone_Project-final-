@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-y_@l$x%iffhq&7dxb&1p4sj0+q61bnl=7#(ck#o4ayg(o4rnb0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['sorsuDMS.pythonanywhere.com']
 
 
 # Application definition
@@ -38,14 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'livereload',
     'django.contrib.staticfiles',
     'login',
     'dean',
     'faculty',
     'pc',
     'qao',
-    'filebrowser'
 ]
 
 MIDDLEWARE = [
@@ -56,7 +54,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'livereload.middleware.LiveReloadScript',
 ]
 
 ROOT_URLCONF = 'capstone_project.urls'
@@ -88,10 +85,10 @@ WSGI_APPLICATION = 'capstone_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'updated',
-        'USER': 'root',
-        'PASSWORD': 'SoHelpMeGod3_16',
-        'HOST': '127.0.0.1',
+        'NAME': 'sorsuDMS$database',
+        'USER': 'sorsuDMS',
+        'PASSWORD': 'Wysiwyg@2001',
+        'HOST': 'sorsuDMS.mysql.pythonanywhere-services.com',
         'PORT': '3306'
     }
 }
@@ -121,7 +118,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Manila'
 
 USE_I18N = True
 
